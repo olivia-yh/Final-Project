@@ -1,0 +1,16 @@
+,Category Name,Variable Name,Variable Description ,Variable Type
+Independent Variables,Demographic,male,male or female,Nominal
+,,age,age of the patient,Continuous 
+,Behavioural,currentSmoker, whether or not the patient is a current smoker,Nominal
+,,cigsPerDay,the number of cigarettes that the person smoked on average in one day,Continuous 
+,Medical( history),BPMeds,whether or not the patient was on blood pressure medication ,Nominal
+,,prevalentStroke,whether or not the patient had previously had a stroke,Nominal
+,,prevalentHyp,whether or not the patient was hypertensive,Nominal
+,,diabetes,whether or not the patient had diabetes,Nominal
+,Medical(current),totChol,total cholesterol level ,Continuous 
+,,sysBP,systolic blood pressure,Continuous 
+,,diaBP,diastolic blood pressure ,Continuous 
+,,BMI,Body Mass Index,Continuous 
+,,heartRate,heart rate,Continuous 
+,,glucose,glucose level ,Continuous
+Dependent Variable,,TenYearCHD,whether the patient has 10-year risk of future coronary heart disease,Nominal

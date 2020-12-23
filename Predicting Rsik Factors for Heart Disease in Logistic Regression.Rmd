@@ -1,0 +1,250 @@
+---
+title: " Predicting Rsik Factors for Heart Disease in Logistic Regression"
+author: "yuhang Ju"
+date: "December 23, 2020"
+output:
+  pdf_document: default
+  html_document: default
+  word_document:
+    reference_docx: template.docx
+---
+<style>
+body {
+text-align: justify}
+</style>
+
+
+#ABSTRACT
+
+
+Write Abstract Here
+
+
+Keywords:Heart Disease, Logistic Regression,  R Markdown, Variable Reduction,
+
+
+#INTRODUCTION
+World Health Organization has estimated 12 million deaths occur worldwide, every year due to Heart diseases. Half the deaths in the United States and other developed countries are due to cardio vascular diseases. The early prognosis of cardiovascular diseases can aid in making decisions on lifestyle changes in high risk patients and in turn reduce the complications. This research intends to pinpoint the most relevant/risk factors of heart disease as well as predict the overall risk using logistic regression.
+
+
+#MATERIALS AND METHODS
+*Data Sources*
+The dataset is publically available on the Kaggle website, and it is from an ongoing ongoing cardiovascular study on residents of the town of Framingham, Massachusetts. The  goal is to predict whether the patient has 10-year risk of future coronary heart disease (CHD).The dataset provides the patients' information. It includes over 4,000 records and 15 attributes.
+
+
+**Variable Description**
+```{r}
+library(knitr)
+vd=read.csv("variable description.csv", header = TRUE)
+kable(vd)
+```
+*Method of Analysis*
+
+**Data Clearing**
+
+
+```{r}
+## Import Data
+ds=read.csv("framingham_heart_disease.csv", header = TRUE)
+data=na.omit(ds)# omit the missing values
+attach(data)
+
+
+```
+Total number of rows with missing values is  489
+since it is only 12 percent of the entire dataset the rows with missing values are excluded.
+
+**Univariate Analysis**
+All variables in the the sample were analysed using Descriptive Statistical Methods:frequency distributions which were presented using Pie charts and frequency distribution tables for categorical variables, histograms for continuous variables and dependent variable graphically presented using a bar chart. Furthermore, continuous variables were interpreted using central tendency and dispersion of measurements.
+
+**Contingency Tables (Cross tabulations)**
+
+The contingency table is a common ways to summarize categorical data. The interest in the contingency table is to identify whether there exists a relationship or association between the row variable and the column variable. (Mohomed & Pause, 1999)) 
+
+**Chi-Squared Distribution**
+Chi-Square test statistic was proposed in 1900 by Karl Pearson, the British statistician. It is also known for the Pearson product-moment correlation estimate, among many contributions (Agresti, 2007).
+
+**Binary Logistic Regression**
+Binary Logistic Regression is the statistical modeling of binary response variables, for which the response outcome for each subject is a "success" or "failure." Binary data are the most common form of categorical data. There are some assumptions to be satisfied to apply binary logistic regression. 
+
+*** Assumptions***
+1.	The dependent variable should be measured on a dichotomous scale.
+2.	There should be one or more independent variables, which can be either continuous or categorical. 
+3. Muliticolinerity of the independent variables
+
+**Assess the statistical significance of parameters: Wald Test**
+Wald test is used to check the significance of the parameters (Agresti A, 2007).
+
+**Feature Selection**
+Variable selection is done using stepAIC() function in R. It begins with a full or null model, and methods for stepwise regression can be specified in the direction argument with character values "forward", "backward" and "both".
+
+*Model Evaluation*
+
+**Confusion matrix**
+ A confusion matrix is a table that is often used to describe the performance of a classification model (or "classifier") on a set of test data for which the true values are known.
+
+**ROC curve**
+An ROC curve (receiver operating characteristic curve) is a graph showing the performance of a classification model at all classification thresholds. This curve plots two parameters: True Positive Rate. False Positive Rate.
+
+#ANALYSIS
+
+This chapter includes descriptive analysis, Chi-Square Analysis, Model fitting and model evaluation.
+*Descriptive Analysis*
+
+**Independent Variables : Continuous**
+
+```{r}
+
+hist(age)
+```
+According to the histgram, it can be identified that the majority of the sample was respondents between 40-50 years and below 35 years during the minority of the sample.
+```{r}
+hist(totChol)
+summary(totChol)
+```
+Illustrayed histgram indicated that the majority of the respondents' total cholesterol level is in between 200 -250 and the mean is 236.9.
+```{r}
+hist(sysBP)
+summary(sysBP)
+sd(sysBP)
+```
+Histgram shows that the majority of the respondents' systolic blood pressure is in between 100-150. Mean of the respondents' systolic blood pressureis 128 and standard deviation is 22.09244.
+
+```{r}
+hist(diaBP)
+summary(diaBP)
+sd(diaBP)
+```
+According to the plotted histogram, it can be identified that diastolic blood pressure of respondents follow a normal distribution. Furthermore, the mean and standard deviation of diastolic blood pressure of respondents are 82.91 and 11.97 respectively.
+
+```{r}
+hist(BMI)
+summary(BMI)
+```
+According to the  histogram mean BMI of respondents 25.78. Furthermore, the majority of the respondents falls within BMI of 20-30 .
+```{r}
+hist(glucose)
+summary(glucose)
+sd(glucose)
+```
+Mean of the respondents'glucose level is 81.86 and standard deviation is 23.9. However, the distribution of the respondents'glucose level is positively skewed as despite in the figure. 
+
+```{r}
+hist(cigsPerDay)
+summary(cigsPerDay)
+```
+The mean number of cigarettes that the person smoked on average in one day is 9.However, there are some people smoke more than 20 cigarettes per day. The majority of the people  smoke 0-5 number of cigarettes per day.
+
+**Independent Variables :categorical variables**
+
+```{r}
+as.data.frame(table(male))
+pie(table(male), labels = c("Female", "Male"), main="Pie Chart of Gender", col=c("yellow","green"))
+```
+Total number of observations are 3656 in the study. 1622 of them are male while rest of 2034 are female.
+
+```{r}
+as.data.frame(table(currentSmoker))
+pie(table(currentSmoker), labels = c("No","Yes" ), main="whether or not the patient is a current smoker", col=c("yellow","green"))
+
+```
+1788 of people currently used to smoke according to the frequency table and pie chart.
+```{r}
+as.data.frame(table(BPMeds))
+pie(table(BPMeds), labels = c("No","Yes"), main="whether or not the patient was on blood pressure medication", col=c("yellow","green"))
+```
+According to the pie chart and frequency table, it can be observed that 3545 of the people are not under the blood pressure medication. 
+```{r}
+as.data.frame(table(prevalentStroke))
+pie(table(prevalentStroke), labels = c("No","Yes"), main="whether or not the patient had previously had a stroke", col=c("yellow","green"))
+```
+Pie chart and frequency tablecsummerized that 3635 of the people hadn't suffer form a stroke previously.
+```{r}
+as.data.frame(table(prevalentHyp))
+pie(table(prevalentHyp), labels = c("No","Yes"), main="whether or not the patient was hypertensive", col=c("yellow","green"))
+```
+2517 of people were hypertensive according to the pie chart and frequency table.
+```{r}
+as.data.frame(table(diabetes))
+pie(table(diabetes), labels = c("No","Yes"), main="whether or not the patient had diabetes", col=c("yellow","green"))
+```
+According to the pie chart and frequency table, it can be identified that only 99 of the people having diabetes.   
+
+**Dependent Variable**
+```{r}
+
+barplot(table(TenYearCHD), main="10 year risk of coronary heart disease CHD ",
+   xlab="Status of patient",col=c("darkblue","red"),legend = c("0 - Do not have a risk,","1- Have a risk"))
+
+
+```
+According to the plotted bar chart, more than 3000 of people do not have a risk on heart disease while only around 500 of people have a risk on heart disease.
+
+*Relationship between Dependent Variable and Categorical Independent Variables*
+
+Chi-square test statistics is evaluated to check the association between dependent variable and categorical independent variables.
+
+```{r}
+library(gmodels)
+CrossTable(male,TenYearCHD)
+chisq.test(TenYearCHD,male)
+
+```
+According to table, 1784 (87.7%) female do not have a 10 year risk of coronary heart disease CHD. On the other hand, 81.1% of female were identified as having 10 year risk of coronary heart disease CHD.  Furthermore, it has been identified by the Pearson's Chi-squared test shows a significant correlation between gender and 10 year risk of coronary heart disease CHD since its p-value is lesser than the 5% significant level. 
+```{r}
+CrossTable(TenYearCHD,currentSmoker)
+chisq.test(TenYearCHD,currentSmoker)
+```
+48.5% of people were currently smoking and they do not have a 10 year risk of coronary heart disease CHD. However, 48.8% people are currently not used to smoke and they have a 10 year risk of coronary heart disease CHD.  Moreover,  Pearson's Chi-squared test shows that the association between status of current smoking and 10 year risk of coronary heart disease CHD is not statistically significant since its p-value is higher than the 5% significant level.
+```{r}
+CrossTable(TenYearCHD,BPMeds)
+chisq.test(TenYearCHD,BPMeds)
+
+```
+According to table, 97.6% of patient was not on blood pressure medication and do not have a 10 year risk of coronary heart disease CHD. On the other hand, 93.3%% of patient was not on blood pressure medication and do not have a 10 year risk of coronary heart disease CHD.  Furthermore, it has been identified by the Pearson's Chi-squared test shows a significant correlation between patient's blood pressure condition and 10 year risk of coronary heart disease CHD  since its p-value is lesser than the 5% significant level. 
+```{r}
+CrossTable(TenYearCHD,prevalentStroke)
+chisq.test(TenYearCHD,prevalentStroke)
+
+```
+
+```{r}
+CrossTable(TenYearCHD,prevalentHyp)
+chisq.test(TenYearCHD,prevalentHyp)
+
+```
+
+```{r}
+CrossTable(TenYearCHD,diabetes)
+chisq.test(TenYearCHD,diabetes)
+
+```
+
+Perform Binary Logistic Regression to process of variables selection
+
+Multicolinearity is check under the assumptions
+
+```{r}
+model=glm(TenYearCHD ~.,family=binomial(link='logit'),data=data)
+summary(model)
+
+#variable reduction methods
+library(MASS)
+step.model_F=stepAIC(model,trace=FALSE,direction = "forward")
+summary(step.model_F)
+step.model_B=stepAIC(model,trace=FALSE,direction = "backward")
+summary(step.model_B)
+step.model_both=stepAIC(model,trace=FALSE,direction = "both")
+summary(step.model_both)
+```
+
+
+```{r}
+library(pROC)
+probRSVM1=predict(model,type=c("response"))
+roccurveM1<- roc(TenYearCHD ~ probRSVM1)
+plot(roccurveM1)
+auc(roccurveM1)
+
+
+```
